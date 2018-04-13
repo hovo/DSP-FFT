@@ -6,7 +6,13 @@ len = length(x);
 if(rem(log2(len), 1) ~= 0)
     p = nextpow2(len);
     x = [x zeros(1, 2^p - len)];
+    len = length(x); % update the length
 end
-out = x;
 
-% Permute data into bit-reversed order
+% Permute indecies into bit-reversed order
+i = 1:len;
+i_bit_rev =  bitrevorder(i);
+
+out = i_bit_rev;
+
+
