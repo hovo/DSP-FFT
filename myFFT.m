@@ -1,4 +1,4 @@
-% Radix-2 Decimation in Frequency FFT algorithm
+% Radix-2 Decimation in Time FFT algorithm
 function out = myFFT(x)
 len = length(x);
 
@@ -9,10 +9,18 @@ if(rem(log2(len), 1) ~= 0)
     len = length(x); % update the length
 end
 
-% Permute indecies into bit-reversed order
-i = 1:len;
-i_bit_rev =  bitrevorder(i);
+% Get even and 
+x_even = x(2:2:len);
+x_odd = x(1:2:len);
 
-out = i_bit_rev;
+if len == 1
+    out = x;
+else
+    y_0 = myFFT(x_even);
+    y_1 = myFFT(x_odd);
+    w = exp(-2*pi*1i/len).^(0:len/2-1);
+    z = w.*y_1;
+    out = [y_0 + z, y_1 - z];
+end
 
 
