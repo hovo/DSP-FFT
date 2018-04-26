@@ -1,4 +1,4 @@
-% Radix-2 Decimation in Time FFT algorithm
+% Radix-2 FFT algorithm
 function out = myFFT(x)
 len = length(x);
 
@@ -9,18 +9,18 @@ if(rem(log2(len), 1) ~= 0)
     len = length(x); % update the length
 end
 
-% Get even and 
+% Get even and odd
 x_even = x(2:2:len);
-x_odd = x(1:2:len);
+x_odd = x(1:2:(len-1));
+
+w = exp(-2*pi*1i/len).^(0:len/2-1);
 
 if len == 1
     out = x;
 else
-    y_0 = myFFT(x_even);
-    y_1 = myFFT(x_odd);
-    w = exp(-2*pi*1i/len).^(0:len/2-1);
-    z = w.*y_1;
-    out = [y_0 + z, y_1 - z];
+    even = myFFT(x_even);
+    odd = myFFT(x_odd);
+    
+    z = w.*even;
+    out = [odd + z, odd - z];
 end
-
-
